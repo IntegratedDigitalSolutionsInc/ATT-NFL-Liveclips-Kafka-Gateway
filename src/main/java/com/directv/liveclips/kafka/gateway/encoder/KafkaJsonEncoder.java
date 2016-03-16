@@ -23,7 +23,6 @@ public class KafkaJsonEncoder implements Encoder<Object> {
      */
     public byte[] toBytes(Object o) {
         try {
-            System.out.println(" ****************     (((((((((((((((((((((((((((((( ))))))))))))))))))))))))))) " +o );
             return objectMapper.writeValueAsBytes(o);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
