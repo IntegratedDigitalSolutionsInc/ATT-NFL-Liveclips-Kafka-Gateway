@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    <context:annotation-config/>
+    <context:component-scan base-package="com.directv.liveclips.kafka.gateway.test"/>
+    <bean id="properties" class="org.apache.camel.component.properties.PropertiesComponent">
+        <property name="location" value="classpath:myprop.properties"/>
+    </bean>
+
+    <bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate">
+        <property name="environment">
+            <props>
+                <prop key="java.naming.factory.initial">org.jboss.naming.remote.client.InitialContextFactory</prop>
+                <prop key="java.naming.provider.url">remote://localhost:4447</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="jmsQueueConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiTemplate">
+            <ref bean="jndiTemplate"/>
+        </property>
+        <property name="jndiName">
+            <value>java:jms/RemoteConnectionFactory</value>
+        </property>
+    </bean>
+
+
+    <bean name="jms" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration" ref="jmsConfig"/>
+        <property name="connectionFactory" ref="authenticatedConnectionFactory"/>
+    </bean>
+
+    <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="authenticatedConnectionFactory"/>
+        <property name="testConnectionOnStartup" value="true"/>
+    </bean>
+
+    <bean id="authenticatedConnectionFactory"
+          class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+        <property name="targetConnectionFactory" ref="jmsQueueConnectionFactory"/>
+        <property name="username" value="jmsLiveClips"/>
+        <property name="password" value="jmsLiveClips2016!"/>
+    </bean>
+
+    <camel:camelContext xmlns="http://camel.apache.org/schema/spring" id="testContext">
+    </camel:camelContext>
+
+</beans>

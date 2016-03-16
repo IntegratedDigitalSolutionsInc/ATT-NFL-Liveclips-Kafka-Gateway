@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:annotation-config/>
+    <context:component-scan base-package="com.directv.liveclips"/>
+
+    <context:property-placeholder  location="classpath:config/application.properties" order="1" />
+    <context:property-placeholder location="file:${EAP_HOME}/application.properties"
+                                  ignore-resource-not-found="true" ignore-unresolvable="true"
+                                  order="0"/>
+
+    <bean id="jndiFactoryBean" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName">
+            <value>${kafka.adaptor.jndi.remote.connection.factory.name}</value>
+        </property>
+    </bean>
+
+    <bean id="authenticatedConnectionFactory"
+          class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+        <property name="targetConnectionFactory" ref="jndiFactoryBean"/>
+        <property name="username" value="${kafka.adaptor.jndi.remote.connection.user.name}"/>
+        <property name="password" value="${kafka.adaptor.jndi.remote.connection.user.password}"/>
+    </bean>
+
+
+    <bean id="cacheConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory" >
+        <property name="targetConnectionFactory" ref="authenticatedConnectionFactory" />
+        <property name="sessionCacheSize" value="${kafka.adaptor.spring.jms.connection.factory.size}" />
+    </bean>
+
+    <bean name="jmsComponent" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory" ref="cacheConnectionFactory"/>
+    </bean>
+    <camel:camelContext  xmlns="http://camel.apache.org/schema/spring" id="jmsToKafkaContext">
+    </camel:camelContext>
+
+</beans>
