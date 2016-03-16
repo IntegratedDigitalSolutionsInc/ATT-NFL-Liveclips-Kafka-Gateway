@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.directv.liveclips</groupId>
-    <artifactId>ATT-NFL-Liveclips-Kafka-Gateway</artifactId>
+    <artifactId>Liveclips-Kafka-Gateway</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>liveclips-kafka-gateway</name>
+    <name>LiveClips - Kafka Gateway</name>
     <url>http://maven.apache.org</url>
     <properties>
         <hornetq.version>2.2.21.Final</hornetq.version>
@@ -232,6 +232,7 @@
     </profiles>
 
     <build>
+        <finalName>LiveClips-Kafka-Gateway</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
