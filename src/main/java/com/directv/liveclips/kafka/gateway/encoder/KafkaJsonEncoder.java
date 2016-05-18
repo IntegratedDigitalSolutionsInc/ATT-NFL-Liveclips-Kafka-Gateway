@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kafka.serializer.Encoder;
 import kafka.utils.VerifiableProperties;
 
+import java.nio.charset.Charset;
+
 /**
  * Custom json encoder for kafka message
  */
+@Deprecated
 public class KafkaJsonEncoder implements Encoder<Object> {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -23,8 +26,8 @@ public class KafkaJsonEncoder implements Encoder<Object> {
      */
     public byte[] toBytes(Object o) {
         try {
-            return objectMapper.writeValueAsBytes(o);
-        } catch (JsonProcessingException e) {
+            return o!= null ? o.toString().getBytes(Charset.forName("UTF-8")) : "".getBytes(Charset.forName("UTF-8"));
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
