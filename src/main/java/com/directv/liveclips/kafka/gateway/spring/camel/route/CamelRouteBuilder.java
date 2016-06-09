@@ -34,7 +34,7 @@ public class CamelRouteBuilder {
     @PostConstruct
     public void configureRoutes() throws Exception {
         logger.debug(" ****************************************** Configure Route Start ***************** ");
-        logger.debug(endpointConfiguration.getAssetPublishedCamelRouteToUri());
+        logger.debug(endpointConfiguration);
         final CamelContext camelContext = jmsComponent.getCamelContext();
         /**
          * asset_published	assetStatus	topic	asset_publish
@@ -44,7 +44,7 @@ public class CamelRouteBuilder {
             @Override
             public void configure() throws Exception {
                 from(endpointConfiguration.getAssetPublishedCamelRouteFromUri())
-                        .to(PRINT_TO_SYSTEM_OUT)
+                        //.to(PRINT_TO_SYSTEM_OUT)
                         .to(endpointConfiguration.getAssetPublishedCamelRouteToUri());
 
             }
