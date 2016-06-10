@@ -44,7 +44,6 @@ public class CamelRouteBuilder {
             @Override
             public void configure() throws Exception {
                 from(endpointConfiguration.getAssetPublishedCamelRouteFromUri())
-                        //.to(PRINT_TO_SYSTEM_OUT)
                         .to(endpointConfiguration.getAssetPublishedCamelRouteToUri());
 
             }
@@ -57,7 +56,6 @@ public class CamelRouteBuilder {
             @Override
             public void configure() throws Exception {
                 from(endpointConfiguration.getNotifyAssetCamelRouteFromUri())
-                        .to(PRINT_TO_SYSTEM_OUT)
                         .to(endpointConfiguration.getNotifyAssetCamelRouteToUri());
 
             }
