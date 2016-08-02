@@ -15,9 +15,15 @@
                                   ignore-resource-not-found="true" ignore-unresolvable="true"
                                   order="0"/>
 
-    <bean id="jndiFactoryBean" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <bean id="jndiFactoryBean" class="org.springframework.jndi.JndiObjectFactoryBean" >
         <property name="jndiName">
             <value>${kafka.adaptor.jndi.remote.connection.factory.name}</value>
+        </property>
+        <property name="lookupOnStartup">
+            <value>${kafka.adaptor.jndi.remote.connection.lookupOnStartup}</value>
+        </property>
+        <property name="proxyInterface">
+            <value>${kafka.adaptor.jndi.remote.connection.proxyInterface}</value>
         </property>
     </bean>
 
